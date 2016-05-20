@@ -152,7 +152,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       cssData[$.fx.cssPrefix + 'transition-duration'] = '0s';
       $content.css(cssData);
       me.position = opt.vertical ? me.getPosition(moveY, translate.translateY) : me.getPosition(moveX, translate.translateX);
-      me.fixIndex();
+      me.fixPosition();
       var $nowPart=$(me.slides[me.activeIndex]),
         $imgs=$nowPart.find('img');
       if (me.opt.autoFixHeight && !me.opt.vertical) {
