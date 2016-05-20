@@ -32,7 +32,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       _anchor = $(opt.anchor),            //           '<div>第三页</div>',    //默认设置内容
       touchStartTime;                     //      ]
     me.slides = [];
-    me.position = 1;
+    me.position = me.opt.loop ? 1 : 0;
     me.ele = _anchor;
     me.activeIndex = 0;
     me.intervalNum = 0;
@@ -417,7 +417,8 @@ QSwiper.prototype = {                     //                   attrs : 'second',
         me.setTransition($content, transitionTime, -me.position * windowSize.pageWidth, 0, 0);
       }
     } else {
-      if (me.opt.vertical) {;
+      if (me.opt.vertical) {
+        ;
         var translateStart = me.getTranslate($content),
           translateY = translateStart.translateY;
         var nextPosition = me.position;
