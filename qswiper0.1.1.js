@@ -70,6 +70,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       me.opt.touchable && me.stopInterval();
       me.fixPosition();
       translateStart = me.getTranslate($content);
+      me.setTransition($content, 0, translateStart.translateX, translateStart.translateY, translateStart.translateZ);
       if ("undefined" != typeof(e.targetTouches)) {
         var touche = e.targetTouches[0];
         startX = touche.pageX;
