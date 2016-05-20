@@ -428,7 +428,6 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       $slides = me.$slides,
       transitionTime = me.opt.transitionTime,
       windowSize = me.getWindowSize();
-    console.log('me.onTransitionEnd:'+me.onTransitionEnd);
     if(!me.onTransitionEnd){
       return false;
     }
@@ -447,7 +446,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
         var nowPosition = me.getPosition(direction, translateY);
         var nextActiveIndex = me.getfixIndex(nextPosition);
         var positionDeviation = nowPosition - nextPosition;
-
+        var activeIndex = me.getfixIndex(me.position);
         me.position = nowPosition;
         me.fixPosition();
         var fixedTranslateStart = me.getTranslate($content);
@@ -460,7 +459,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
         var nowPosition = me.getPosition(direction, translateX);
         var nextActiveIndex = me.getfixIndex(nextPosition);
         var positionDeviation = nowPosition - nextPosition;
-
+        var activeIndex = me.getfixIndex(me.position);
         me.position = nowPosition;
         me.fixPosition();
         var fixedTranslateStart = me.getTranslate($content);
