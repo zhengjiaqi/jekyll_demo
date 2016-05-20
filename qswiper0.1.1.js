@@ -55,10 +55,16 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     me.oldActiveIndex = 0;
     me.interval();
 
-    $qtSwiper.on('touchstart', touchstart).on('mousedown', touchstart);
-    $qtSwiper.on('touchmove', touchmove).on('mousemove', touchmove);
-    $qtSwiper.on('touchend', touchend);
-    $qtSwiper.on('mouseup', touchend);
+    if(typeof window.ontouchstart !='undefined'){
+      $qtSwiper.on('touchstart', touchstart);
+      $qtSwiper.on('touchmove', touchmove);
+      $qtSwiper.on('touchend', touchend);
+    }else{
+      $qtSwiper.on('mousedown', touchstart);
+      $qtSwiper.on('mousemove', touchmove);
+      $qtSwiper.on('mouseup', touchend);
+    }
+
 
     setWidthAndHeight(me);
     $(window).on('resize', function() {
@@ -69,6 +75,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       me.opt.touchable && me.stopInterval();
       me.fixPosition();
       translateStart = me.getComputedTranslate($content);
+      console.log('touchstart-setTransition'+'&*&*&');
       me.setTransition($content, 0, translateStart.translateX, translateStart.translateY, translateStart.translateZ);
       if ("undefined" != typeof(e.targetTouches)) {
         var touche = e.targetTouches[0];
@@ -128,20 +135,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
         return;
       }
       me.onStart = false;
-      var endX = 0, endY = 0;
-      if ("undefined" != typeof(e.changedTouches)) {
-        var touche = e.changedTouches[0];
-        endX = touche.pageX;
-        endY = touche.pageY;
-      } else if (e.clientX != "" || e.clientX != undefined) {
-        endX = e.clientX;
-        endY = e.clientY;
-      }
-      var length = opt.vertical ? Math.abs(endY - startY) : Math.abs(endX - startX);
-      if (length > 10) {
-        console.log('move$$$$$$$$$')
-        me.move(me.moveDirection);
-      }
+      me.move();
     }
 
     $content.on($.fx.transitionEnd, function(e) {
@@ -172,7 +166,6 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       });
       me.oldActiveIndex != me.activeIndex && me.opt.onSlideChange(me.activeIndex);
       me.oldActiveIndex = me.activeIndex;
-
       me.onTransitionEnd = true;
       e.stopPropagation();
     });
@@ -413,10 +406,13 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       var activeIndex = me.getfixIndex(me.position);
       console.log('beforeSlideChange:'+'beforeSlideChange%%%');
       me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, activeIndex);
+      console.log('beforeSlideChange:'+-me.position * windowSize.pageHeight);
       me.setTransition($content, transitionTime, 0, -me.position * windowSize.pageHeight, 0);
     } else {
+      console.log('Move________________');
       var activeIndex = me.getfixIndex(me.position);
       console.log('beforeSlideChange:'+'beforeSlideChange+++++');
+      console.log('me.position:'+me.position);
       me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, activeIndex);
       me.setTransition($content, transitionTime, -me.position * windowSize.pageWidth, 0, 0);
     }
@@ -540,6 +536,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     TranslateZ = TranslateZ || 0;
     ($dom.css('transition-duration') !== (transitionTime + 's')) && (cssData[cssPrefix + 'transition-duration'] = transitionTime + 's');
     cssData[cssPrefix + 'transform'] = 'translate3d(' + TranslateX + 'px,' + TranslateY + 'px,' + TranslateZ + 'px)';
+    console.log('setTransition',dom, transitionTime, TranslateX, TranslateY, TranslateZ)
     $dom.css(cssData);
   },
   //停止触摸滑动
