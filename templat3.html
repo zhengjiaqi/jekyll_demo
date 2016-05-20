@@ -26,6 +26,11 @@
     }
     .sl_content > div{position: relative;}
 
+    .silde-page{
+      position: fixed;
+      right: 0;
+      top: 50%;
+    }
   </style>
 </head>
 <body>
@@ -73,6 +78,10 @@
 
     </ul>
   </div>
+  <div class="silde-page">
+    <div class="pre-page1">上一页 </div>
+    <div class="next-page1">下一页 </div>
+  </div>
   <div class="popup-init"></div>
 </div>
 
@@ -89,7 +98,7 @@
 
     var config={
       anchor:'.init',
-      loop:false,
+      loop:true,
       autoplay:false,
       vertical:true,
       limit:0.1,
@@ -105,6 +114,13 @@
       console.log('111111********from:'+from+';to:'+to)
 
     });
+    $('.pre-page1').on('tap',function(){
+      qswiper.slidePrev();
+    })
+
+    $('.next-page1').on('tap',function(){
+      qswiper.slideNext();;
+    })
     $('.init').on('tap','.toNext',function(){
       qswiper.slideNext();
     })
