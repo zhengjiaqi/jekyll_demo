@@ -37,6 +37,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     me.activeIndex = 0;
     me.intervalNum = 0;
     me.onStart = false;
+    me.onTransitionEnd = true;
     me.moveDirection = -1;
     build();
 
@@ -170,6 +171,8 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       });
       me.oldActiveIndex != me.activeIndex && me.opt.onSlideChange(me.activeIndex);
       me.oldActiveIndex = me.activeIndex;
+
+      me.onTransitionEnd = true;
       e.stopPropagation();
     });
 
@@ -417,8 +420,11 @@ QSwiper.prototype = {                     //                   attrs : 'second',
         me.setTransition($content, transitionTime, -me.position * windowSize.pageWidth, 0, 0);
       }
     } else {
+      if(!me.onTransitionEnd){
+        return;
+      }
+      me.onTransitionEnd = false;
       if (me.opt.vertical) {
-        ;
         var translateStart = me.getTranslate($content),
           translateY = translateStart.translateY;
         var nextPosition = me.position;
