@@ -58,7 +58,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     $qtSwiper.on('touchstart', touchstart).on('mousedown', touchstart);
     $qtSwiper.on('touchmove', touchmove).on('mousemove', touchmove);
     $qtSwiper.on('touchend', touchend);
-    $(window).on('mouseup', touchend);
+    $qtSwiper.on('mouseup', touchend);
 
     setWidthAndHeight(me);
     $(window).on('resize', function() {
@@ -139,6 +139,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       }
       var length = opt.vertical ? Math.abs(endY - startY) : Math.abs(endX - startX);
       if (length > 10) {
+        console.log('move$$$$$$$$$')
         me.move(me.moveDirection);
       }
     }
@@ -330,14 +331,14 @@ QSwiper.prototype = {                     //                   attrs : 'second',
   //下滑一页
   slideNext: function() {
     this.position += 1;
-    this.move(-1);
+    this.moveTo(-1);
   },
   //上滑一页
   slidePrev: function() {
     console.log('this.position:' + this.position)
     this.position -= 1;
     console.log('this.position:' + this.position)
-    this.move(1);
+    this.moveTo(1);
   },
   showAllPart: function($slides) {
     var me = this;
@@ -392,74 +393,79 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     (toIndex < 0) && (toIndex = me.num - 1);
     return toIndex;
   },
-  move: function(direction) {
+  move: function() {
+    var me = this,
+    $content = me.$content,
+    $slides = me.$slides,
+    transitionTime = me.opt.transitionTime,
+    windowSize = me.getWindowSize();
+    me.stopInterval();
+    me.showAllPart($slides);
+    if (!me.opt.loop && me.position > me.num - 1) {
+      me.setTransition($content, transitionTime, 0, 0, 0);
+    } else if (!me.opt.loop && me.position < 0) {
+      if (me.opt.vertical) {
+        me.setTransition($content, transitionTime, 0, -(me.num - 1) * windowSize.pageHeight, 0);
+      } else {
+        me.setTransition($content, transitionTime, -(me.num - 1) * windowSize.pageWidth, 0, 0);
+      }
+    } else if (me.opt.vertical) {
+      var activeIndex = me.getfixIndex(me.position);
+      console.log('beforeSlideChange:'+'beforeSlideChange%%%');
+      me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, activeIndex);
+      me.setTransition($content, transitionTime, 0, -me.position * windowSize.pageHeight, 0);
+    } else {
+      var activeIndex = me.getfixIndex(me.position);
+      console.log('beforeSlideChange:'+'beforeSlideChange+++++');
+      me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, activeIndex);
+      me.setTransition($content, transitionTime, -me.position * windowSize.pageWidth, 0, 0);
+    }
+  },
+  //使用 addTranslate移动
+  moveTo: function(direction){
     var me = this,
       $content = me.$content,
       $slides = me.$slides,
       transitionTime = me.opt.transitionTime,
       windowSize = me.getWindowSize();
+    console.log('me.onTransitionEnd:'+me.onTransitionEnd);
+    if(!me.onTransitionEnd){
+      return false;
+    }
+    me.onTransitionEnd = false;
     direction && (me.moveDirection = direction);
-    me.stopInterval();
-    me.showAllPart($slides);
+
     if (!me.opt.loop) {
-      if (!me.opt.loop && me.position > me.num - 1) {
-        me.setTransition($content, transitionTime, 0, 0, 0);
-      } else if (!me.opt.loop && me.position < 0) {
-        if (me.opt.vertical) {
-          me.setTransition($content, transitionTime, 0, -(me.num - 1) * windowSize.pageHeight, 0);
-        } else {
-          me.setTransition($content, transitionTime, -(me.num - 1) * windowSize.pageWidth, 0, 0);
-        }
-      } else if (me.opt.vertical) {
-        var activeIndex = me.getfixIndex(me.position);
-        me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, activeIndex);
-        me.setTransition($content, transitionTime, 0, -me.position * windowSize.pageHeight, 0);
-      } else {
-        var activeIndex = me.getfixIndex(me.position);
-        me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, activeIndex);
-        me.setTransition($content, transitionTime, -me.position * windowSize.pageWidth, 0, 0);
-      }
+      me.move();
     } else {
-      if(!me.onTransitionEnd){
-        return;
-      }
-      me.onTransitionEnd = false;
+      me.stopInterval();
+      me.showAllPart($slides);
       if (me.opt.vertical) {
         var translateStart = me.getTranslate($content),
           translateY = translateStart.translateY;
         var nextPosition = me.position;
         var nowPosition = me.getPosition(direction, translateY);
         var nextActiveIndex = me.getfixIndex(nextPosition);
-        me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, nextActiveIndex);
         var positionDeviation = nowPosition - nextPosition;
-        if (Math.abs(positionDeviation) != 1) {
-          me.setTransition($content, transitionTime, 0, -me.position * windowSize.pageHeight, 0);
-        } else {
-          me.position = nowPosition;
-          me.fixPosition();
-          setTimeout(function() {
-            var fixedTranslateStart = me.getTranslate($content);
-            me.addTranslate($content, fixedTranslateStart, transitionTime, 0, positionDeviation * windowSize.pageHeight, 0)
-          }, 40)
-        }
+
+        me.position = nowPosition;
+        me.fixPosition();
+        var fixedTranslateStart = me.getTranslate($content);
+        me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, nextActiveIndex);
+        me.addTranslate($content, fixedTranslateStart, transitionTime, 0, positionDeviation * windowSize.pageHeight, 0)
       } else {
         var translateStart = me.getTranslate($content),
           translateX = translateStart.translateX;
         var nextPosition = me.position;
         var nowPosition = me.getPosition(direction, translateX);
         var nextActiveIndex = me.getfixIndex(nextPosition);
-        me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, nextActiveIndex);
         var positionDeviation = nowPosition - nextPosition;
-        if (Math.abs(positionDeviation) != 1) {
-          me.setTransition($content, transitionTime, -me.position * windowSize.pageWidth, 0, 0);
-        } else {
-          me.position = nowPosition;
-          me.fixPosition();
-          setTimeout(function() {
-            var fixedTranslateStart = me.getTranslate($content);
-            me.addTranslate($content, fixedTranslateStart, transitionTime, positionDeviation * windowSize.pageWidth, 0, 0)
-          }, 40)
-        }
+
+        me.position = nowPosition;
+        me.fixPosition();
+        var fixedTranslateStart = me.getTranslate($content);
+        me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, nextActiveIndex);
+        me.addTranslate($content, fixedTranslateStart, transitionTime, positionDeviation * windowSize.pageWidth, 0, 0)
       }
     }
 
