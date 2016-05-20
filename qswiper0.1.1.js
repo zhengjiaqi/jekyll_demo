@@ -69,7 +69,9 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     function touchstart(e) {
       me.opt.touchable && me.stopInterval();
       me.fixPosition();
-      translateStart = me.getTranslate($content);
+      //console.log(getComputedStyle($content[0],false)[$.fx.cssPrefix + 'transform']);
+      //console.log(me.getComputedTranslate($content));
+      translateStart = me.getComputedTranslate($content);
       me.setTransition($content, 0, translateStart.translateX, translateStart.translateY, translateStart.translateZ);
       if ("undefined" != typeof(e.targetTouches)) {
         var touche = e.targetTouches[0];
@@ -503,6 +505,15 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       }
     }
     return {translateX: 0, translateY: 0, translateZ: 0}
+  },
+  getComputedTranslate: function (sel) {
+    var $sel = $(sel);
+    var computedStyle = getComputedStyle($sel[0],false)[$.fx.cssPrefix + 'transform'].match(/([0-9|\.|-]+)/g);
+    if(computedStyle){
+      return {translateX: parseFloat(computedStyle[4]), translateY: parseFloat(computedStyle[5]), translateZ: 0}
+    }else{
+      return {translateX: 0, translateY: 0, translateZ: 0}
+    }
   },
   addTranslate: function (sel, translateStart, transitionTime, translateX, translateY, translateZ) {
     var setTranslateX = translateStart.translateX + (translateX || 0),
