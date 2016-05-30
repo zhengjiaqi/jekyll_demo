@@ -39,6 +39,8 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     me.onStart = false;
     me.onTransitionEnd = true;
     me.moveDirection = -1;
+    //所有真实dom
+    me.allSlides = [];
     build();
 
     var $qtSwiper = me.ele.children('.qt-swiper'),
@@ -55,16 +57,15 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     me.oldActiveIndex = 0;
     me.interval();
 
-    if(typeof window.ontouchstart !='undefined'){
+    if (typeof window.ontouchstart != 'undefined') {
       $qtSwiper.on('touchstart', touchstart);
       $qtSwiper.on('touchmove', touchmove);
       $qtSwiper.on('touchend', touchend);
-    }else{
+    } else {
       $qtSwiper.on('mousedown', touchstart);
       $qtSwiper.on('mousemove', touchmove);
       $qtSwiper.on('mouseup', touchend);
     }
-
 
     setWidthAndHeight(me);
     $(window).on('resize', function() {
@@ -75,7 +76,6 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       me.opt.touchable && me.stopInterval();
       me.fixPosition();
       translateStart = me.getComputedTranslate($content);
-      console.log('touchstart-setTransition'+'&*&*&');
       me.setTransition($content, 0, translateStart.translateX, translateStart.translateY, translateStart.translateZ);
       if ("undefined" != typeof(e.targetTouches)) {
         var touche = e.targetTouches[0];
@@ -135,7 +135,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
         return;
       }
       me.onStart = false;
-      me.move();
+      me.move(me.position);
     }
 
     $content.on($.fx.transitionEnd, function(e) {
@@ -147,8 +147,9 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       cssData[$.fx.cssPrefix + 'transition-duration'] = '0s';
       $content.css(cssData);
       me.position = opt.vertical ? me.getPosition(moveY, translate.translateY) : me.getPosition(moveX, translate.translateX);
-      me.fixPosition();
-      var $nowPart = $(me.slides[me.activeIndex]),
+      //me.fixPosition();
+      me.fixIndex();
+      var $nowPart = $(me.allSlides[me.position]),
         $imgs = $nowPart.find('img');
       if (me.opt.autoFixHeight && !me.opt.vertical) {
         $slides.css({height: '1px', overflow: 'hidden'});
@@ -203,12 +204,18 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       me.num = $slides.length || 0;
       var last = $slides.last(), first = $slides.first();
       for (var i = 0; i < $slides.length; i++) {
-        me.slides.push($slides[i]);
+        var domSlides = $slides[i];
+        me.slides.push(domSlides);
+        me.allSlides.push(domSlides);
       }
       if (opt.loop) {
-        var slContent = $content;
-        slContent.prepend(last.clone());
-        slContent.append(first.clone());
+        var slContent = $content,
+          lastClone = last.clone()[0],
+          firstClone = first.clone()[0];
+        slContent.prepend(lastClone);
+        slContent.append(firstClone);
+        me.allSlides.splice(0, 0, lastClone);
+        me.allSlides.push(firstClone);
       }
 
     }
@@ -304,14 +311,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
   },
   //滑动到对应序号的页
   slideTo: function(n) {
-    var me = this,
-      nextPosition,
-      moveDirection = -1;
-    n = parseInt(n);
-    me.opt.loop ? nextPosition = n + 1 : nextPosition = n;
-    moveDirection = me.position - nextPosition;
-    me.position = nextPosition;
-    me.move(moveDirection);
+    this.move(n);
   },
   //获得处于激活状态的页
   getActiveSlide: function() {
@@ -319,19 +319,15 @@ QSwiper.prototype = {                     //                   attrs : 'second',
   },
   //获得对应序号的页
   getSlide: function(n) {
-    return this.slides[n];
+    return this.slides[n-1];
   },
   //下滑一页
   slideNext: function() {
-    this.position += 1;
-    this.moveTo(-1);
+    this.moveTo(-1, this.position + 1);
   },
   //上滑一页
   slidePrev: function() {
-    console.log('this.position:' + this.position)
-    this.position -= 1;
-    console.log('this.position:' + this.position)
-    this.moveTo(1);
+    this.moveTo(1, this.position - 1);
   },
   showAllPart: function($slides) {
     var me = this;
@@ -377,54 +373,54 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       } else {
         activeIndex = position;
       }
-      activeIndex = activeIndex - 1;
     } else {
-      activeIndex = position;
+      activeIndex = position + 1;
     }
-    var toIndex = activeIndex, me = this;
-    (toIndex >= me.num) && (toIndex = 0);
-    (toIndex < 0) && (toIndex = me.num - 1);
-    return toIndex;
+    return activeIndex;
   },
-  move: function() {
-    var me = this,
-    $content = me.$content,
-    $slides = me.$slides,
-    transitionTime = me.opt.transitionTime,
-    windowSize = me.getWindowSize();
-    me.stopInterval();
-    me.showAllPart($slides);
-    if (!me.opt.loop && me.position > me.num - 1) {
-      me.setTransition($content, transitionTime, 0, 0, 0);
-    } else if (!me.opt.loop && me.position < 0) {
-      if (me.opt.vertical) {
-        me.setTransition($content, transitionTime, 0, -(me.num - 1) * windowSize.pageHeight, 0);
-      } else {
-        me.setTransition($content, transitionTime, -(me.num - 1) * windowSize.pageWidth, 0, 0);
-      }
-    } else if (me.opt.vertical) {
-      var activeIndex = me.getfixIndex(me.position);
-      console.log('beforeSlideChange:'+'beforeSlideChange%%%');
-      me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, activeIndex);
-      console.log('beforeSlideChange:'+-me.position * windowSize.pageHeight);
-      me.setTransition($content, transitionTime, 0, -me.position * windowSize.pageHeight, 0);
-    } else {
-      console.log('Move________________');
-      var activeIndex = me.getfixIndex(me.position);
-      console.log('beforeSlideChange:'+'beforeSlideChange+++++');
-      console.log('me.position:'+me.position);
-      me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, activeIndex);
-      me.setTransition($content, transitionTime, -me.position * windowSize.pageWidth, 0, 0);
-    }
-  },
-  //使用 addTranslate移动
-  moveTo: function(direction){
+  move: function(pos) {
     var me = this,
       $content = me.$content,
       $slides = me.$slides,
       transitionTime = me.opt.transitionTime,
       windowSize = me.getWindowSize();
-    if(!me.onTransitionEnd){
+    me.stopInterval();
+    me.showAllPart($slides);
+    var maxLimit,
+      minLimit;
+    if (!me.opt.loop) {
+      maxLimit = me.num - 1;
+      minLimit = 0;
+    } else {
+      maxLimit = me.num + 1;
+      minLimit = 0;
+    }
+    if (pos > maxLimit) {
+      me.setTransition($content, transitionTime, 0, 0, 0);
+    } else if (pos < minLimit) {
+      if (me.opt.vertical) {
+        me.setTransition($content, transitionTime, 0, -(maxLimit) * windowSize.pageHeight, 0);
+      } else {
+        me.setTransition($content, transitionTime, -(maxLimit) * windowSize.pageWidth, 0, 0);
+      }
+    } else if (me.opt.vertical) {
+      var activeIndex = me.getfixIndex(pos);
+      me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, activeIndex);
+      me.setTransition($content, transitionTime, 0, -pos * windowSize.pageHeight, 0);
+    } else {
+      var activeIndex = me.getfixIndex(pos);
+      me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, activeIndex);
+      me.setTransition($content, transitionTime, -pos * windowSize.pageWidth, 0, 0);
+    }
+  },
+  //使用 addTranslate移动
+  moveTo: function(direction, pos) {
+    var me = this,
+      $content = me.$content,
+      $slides = me.$slides,
+      transitionTime = me.opt.transitionTime,
+      windowSize = me.getWindowSize();
+    if (!me.onTransitionEnd) {
       return false;
     }
     me.onTransitionEnd = false;
@@ -435,31 +431,17 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     } else {
       me.stopInterval();
       me.showAllPart($slides);
+      var nextPosition = pos;
+      var nowPosition = me.position;
+      var nextActiveIndex = me.getfixIndex(nextPosition);
+      var positionDeviation = nowPosition - nextPosition;
+      me.activeIndex == nextActiveIndex && (nextActiveIndex -= direction);
+      me.fixPosition();
+      var fixedTranslateStart = me.getTranslate($content);
+      me.activeIndex != nextActiveIndex && me.opt.beforeSlideChange(me.activeIndex, nextActiveIndex);
       if (me.opt.vertical) {
-        var translateStart = me.getTranslate($content),
-          translateY = translateStart.translateY;
-        var nextPosition = me.position;
-        var nowPosition = me.getPosition(direction, translateY);
-        var nextActiveIndex = me.getfixIndex(nextPosition);
-        var positionDeviation = nowPosition - nextPosition;
-        var activeIndex = me.getfixIndex(me.position);
-        me.position = nowPosition;
-        me.fixPosition();
-        var fixedTranslateStart = me.getTranslate($content);
-        me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, nextActiveIndex);
         me.addTranslate($content, fixedTranslateStart, transitionTime, 0, positionDeviation * windowSize.pageHeight, 0)
       } else {
-        var translateStart = me.getTranslate($content),
-          translateX = translateStart.translateX;
-        var nextPosition = me.position;
-        var nowPosition = me.getPosition(direction, translateX);
-        var nextActiveIndex = me.getfixIndex(nextPosition);
-        var positionDeviation = nowPosition - nextPosition;
-        var activeIndex = me.getfixIndex(me.position);
-        me.position = nowPosition;
-        me.fixPosition();
-        var fixedTranslateStart = me.getTranslate($content);
-        me.activeIndex != activeIndex && me.opt.beforeSlideChange(me.activeIndex, nextActiveIndex);
         me.addTranslate($content, fixedTranslateStart, transitionTime, positionDeviation * windowSize.pageWidth, 0, 0)
       }
     }
@@ -536,7 +518,6 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     TranslateZ = TranslateZ || 0;
     ($dom.css('transition-duration') !== (transitionTime + 's')) && (cssData[cssPrefix + 'transition-duration'] = transitionTime + 's');
     cssData[cssPrefix + 'transform'] = 'translate3d(' + TranslateX + 'px,' + TranslateY + 'px,' + TranslateZ + 'px)';
-    console.log('setTransition',dom, transitionTime, TranslateX, TranslateY, TranslateZ)
     $dom.css(cssData);
   },
   //停止触摸滑动
