@@ -75,8 +75,6 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     function touchstart(e) {
       me.opt.touchable && me.stopInterval();
       me.fixPosition();
-      translateStart = me.getComputedTranslate($content);
-      me.setTransition($content, 0, translateStart.translateX, translateStart.translateY, translateStart.translateZ);
       if ("undefined" != typeof(e.targetTouches)) {
         var touche = e.targetTouches[0];
         startX = touche.pageX;
@@ -87,6 +85,8 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       }
       X = startX;
       Y = startY;
+      translateStart = me.getComputedTranslate($content);
+      me.setTransition($content, 0, translateStart.translateX, translateStart.translateY, translateStart.translateZ);
       me.onStart = true;
       me.showAllPart($slides);
     }
