@@ -468,8 +468,8 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     var me = this;
     var base = me.opt.base, pageWidth, pageHeight;
     if (base == 'window') {
-      pageWidth = window.innerWidth;
-      pageHeight = window.innerHeight;
+      pageWidth = document.documentElement.clientWidth;
+      pageHeight = document.documentElement.clientHeight;
     } else {
       pageWidth = $(base)[0].offsetWidth;
       pageHeight = $(base)[0].offsetHeight;
