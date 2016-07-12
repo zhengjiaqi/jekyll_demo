@@ -120,7 +120,7 @@
             $qtPopupWrap.css({width:opt.width});
             opt.height && (opt.autoFixHeight ? $qtPopupWrap.css({'max-height':opt.height}) : $qtPopupWrap.css({height:opt.height}));
             opt.content ? $qtPopupContent.html(opt.content) : $qtPopup.find('.qt-popup-msg').html(opt.message);
-            $qtPopup.css({'overflow-y': 'scroll'});
+            $qtPopup.css({'overflow-y': 'scroll','transform': 'translate3d(0,0,0)','-webkit-overflow-scrolling': 'touch'});
             var oFragment = document.createDocumentFragment();
             $.each(opt.buttons, function (index, item) {
                 var div= document.createElement('div');
