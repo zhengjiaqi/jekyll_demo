@@ -3,7 +3,7 @@
 <head>
   <title>H5</title>
   <meta charset="UTF-8">
-  <meta content="width=device-width,minimum-scale=1.00001,maximum-scale=1.00001,shrink-to-fit=no,user-scalable=no,minimal-ui"
+  <meta content="width=device-width,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no,minimal-ui"
         name="viewport">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta content="telephone=no" name="format-detection"/>
@@ -19,7 +19,6 @@
     * {
       margin: 0;
       padding: 0;
-      /*list-style: none*/
     }
 
     img {
@@ -32,13 +31,14 @@
     .qt-popup-content div{
       height: 50px;
     }
-    /*body,html{*/
-      /*height: 100%;*/
-    /*}*/
-    /*.wrap{*/
-      /*height: 100%;*/
-      /*overflow: scroll;*/
-    /*}*/
+    /*使用与popup-init同级的内滚动，避免弹窗滚动引起全局滚动*/
+    body,html{
+      height: 100%;
+    }
+    .wrap{
+      height: 100%;
+      overflow: scroll;
+    }
 
   </style>
 </head>
@@ -62,7 +62,7 @@
     <br/>
     <br/>
     <br/>
-    <div class="show">bbbbb</div>
+    <div class="show">点我弹窗</div>
     <br/>
     <br/>
     <br/>
@@ -139,17 +139,19 @@
           label: '取消',
           className: 'cancel',
           action: function() {
-            alert(2)
+            console.log('取消');
+            qpopup.hide();
           }
         },
         {
           label: '确定',
           className: 'ok',
           action: function() {
-            alert(1)
+            console.log('确定')
           }
         }
       ],
+      autoHide: false,
       content: '<div class="kk">sssss</div><div class="kk">sssss</div><div class="kk">sssss</div><div class="kk">sssss</div><div class="bb">bbbbb</div><div class="bb">ccc</div><div class="bb">cc</div><div class="bb">ddd</div>',
       height: '30%',
       width: '90%',
@@ -160,7 +162,7 @@
       events: {
         'tap .kk': 'al',
         'tap .bb': 'alb',
-        'tap .qt-popup-mask': 'ppp'
+        'tap .qt-popup-mask': 'popupMask'
       },
       al: function() {
         console.log(this);
@@ -171,7 +173,7 @@
       onTapMask: function(e) {
         console.log('***showed:' + qpopup.showed);
       },
-      ppp: function(e) {
+      popupMask: function(e) {
         console.log(e)
       },
       onShow: function() {
@@ -183,9 +185,7 @@
     };
     var qpopup = new QPopup('.popup-init', popupConfig);
     $('.show').on('tap', function() {
-      console.log(111111 + 'showed:' + qpopup.showed)
       qpopup.show();
-      console.log(222222 + 'showed:' + qpopup.showed)
     })
 
   })();

@@ -4,7 +4,7 @@
  * @param {Object} options 配置参数
  *
  */
-function QSwiper(ele, options) {          //img元素加上 data-src 默认支持懒加载
+function QSwiper(ele, options) {
   this.opt = {
     anchor: ele || '',                    //页面锚点
     limit: 1 / 5,                         //页面滑动达到limit时切换页面
@@ -16,21 +16,21 @@ function QSwiper(ele, options) {          //img元素加上 data-src 默认支�
     base: 'window',                       //设置轮播组件宽度的基准元素
     touchable: true,                      //是否开启滑动切换
     autoFixHeight: false,                 //是否在滚动时自动消除slide间高度影响（仅横向模式使用）
-    slides: [],                            //配置展示的slide,
-    onSlideChange: function() {          //       slides:[
-    },           //页面切换后的回调         //           {
-    beforeSlideChange: function() {      //              attrs : {
+    slides: [],                           //配置展示的slide,
+    onSlideChange: function() {           //       slides:[
+    },           //页面切换后的回调         //            {
+    beforeSlideChange: function() {       //               attrs : {
     }        //页面切换前的回调             //                 'class':'first',
-  };                                      //                    'data-k':'dataK'
-  $.extend(this.opt, options);            //                 },
-  this.init(this.opt);                    //                 tpl : '<div>第一页</div>',
-};                                        //                 },
-                                          //                 {
-QSwiper.prototype = {                     //                   attrs : 'second',     //默认设置class
-  init: function(opt) {                  //                 tpl : '<div>第二页</div>',
-    var me = this, opt = me.opt,          //             },
+  };                                      //                 'data-k':'dataK'
+  $.extend(this.opt, options);            //              },
+  this.init(this.opt);                    //              tpl : '<div>第一页</div>',
+};                                        //            },
+                                          //            {
+QSwiper.prototype = {                     //              attrs : 'second',     //默认设置class
+  init: function(opt) {                   //               tpl : '<div>第二页</div>',
+    var me = this, opt = me.opt,          //            },
       _anchor = $(opt.anchor),            //           '<div>第三页</div>',    //默认设置内容
-      touchStartTime;                     //      ]
+      touchStartTime;                     //       ]
     me.slides = [];
     me.position = me.opt.loop ? 1 : 0;
     me.ele = _anchor;
@@ -149,8 +149,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       me.position = opt.vertical ? me.getPosition(moveY, translate.translateY) : me.getPosition(moveX, translate.translateX);
       //me.fixPosition();
       me.fixIndex();
-      var $nowPart = $(me.allSlides[me.position]),
-        $imgs = $nowPart.find('img');
+      var $nowPart = $(me.allSlides[me.position]);
       if (me.opt.autoFixHeight && !me.opt.vertical) {
         $slides.css({height: '1px', overflow: 'hidden'});
         $nowPart.css({height: '', overflow: ''});
@@ -158,13 +157,6 @@ QSwiper.prototype = {                     //                   attrs : 'second',
       me.interval();
       $slides.removeClass('active');
       $nowPart.addClass('active');
-      $.each($imgs, function(index, item) {
-        item = $(item);
-        var daraSrc = item.attr('data-src');
-        if (daraSrc) {
-          item.attr('src', daraSrc);
-        }
-      });
       me.oldActiveIndex != me.activeIndex && me.opt.onSlideChange(me.activeIndex);
       me.oldActiveIndex = me.activeIndex;
       me.onTransitionEnd = true;
@@ -319,7 +311,7 @@ QSwiper.prototype = {                     //                   attrs : 'second',
   },
   //获得对应序号的页
   getSlide: function(n) {
-    return this.slides[n-1];
+    return this.slides[n - 1];
   },
   //下滑一页
   slideNext: function() {
@@ -425,9 +417,12 @@ QSwiper.prototype = {                     //                   attrs : 'second',
     }
     me.onTransitionEnd = false;
     direction && (me.moveDirection = direction);
-
     if (!me.opt.loop) {
-      me.move();
+      if (pos > 0 && pos < me.num) {
+        me.move(pos);
+      } else {
+        me.onTransitionEnd = true;
+      }
     } else {
       me.stopInterval();
       me.showAllPart($slides);
