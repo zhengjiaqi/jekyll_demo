@@ -1,10 +1,10 @@
 /**
- * 滑动组件
+ * 移动端滑动组件
  * @param {dom} ele dom容器
  * @param {Object} options 配置参数
- *
+ * @param {Object} $ zepto
  */
-function QSwiper(ele, options) {
+function QSwiper(ele, options, $) {
   this.opt = {
     anchor: ele || '',                    //页面锚点
     limit: 1 / 5,                         //页面滑动达到limit时切换页面
@@ -21,7 +21,8 @@ function QSwiper(ele, options) {
     },           //页面切换后的回调         //            {
     beforeSlideChange: function() {       //               attrs : {
     }        //页面切换前的回调             //                 'class':'first',
-  };                                      //                 'data-k':'dataK'
+  };
+  $ = $ || window.$;                      //                 'data-k':'dataK'
   $.extend(this.opt, options);            //              },
   this.init(this.opt);                    //              tpl : '<div>第一页</div>',
 };                                        //            },
@@ -75,6 +76,7 @@ QSwiper.prototype = {                     //              attrs : 'second',     
     function touchstart(e) {
       me.opt.touchable && me.stopInterval();
       me.fixPosition();
+      me.touchDirection = 0;     //手指滑动方向
       if ("undefined" != typeof(e.targetTouches)) {
         var touche = e.targetTouches[0];
         startX = touche.pageX;
@@ -108,23 +110,26 @@ QSwiper.prototype = {                     //              attrs : 'second',     
       }
       moveX = (X - startX);
       moveY = (Y - startY);
+      if(me.touchDirection == 0){
+        me.touchDirection = Math.abs(moveX) - Math.abs(moveY);
+      }
 
-      if (opt.vertical) {
+      if (me.opt.vertical) {
         translateY = translateStart.translateY + moveY;
         if (translateY < pageHeight * limit && translateY > -contentHeight + pageHeight * (1 - limit)) {
           me.moveDirection = moveY;
           me.position = me.getPosition(moveY, translateY);
           me.addTranslate($content, translateStart, 0, 0, moveY);
         }
-      } else {
+        e.preventDefault();
+        e.stopPropagation();
+      } else if(me.touchDirection > 0){
         translateX = translateStart.translateX + moveX;
         if (translateX < pageWidth * limit && translateX > -contentWidth + pageWidth * (1 - limit)) {
           me.moveDirection = moveX;
           me.position = me.getPosition(moveX, translateX);
           me.addTranslate($content, translateStart, 0, moveX);
         }
-      }
-      if (me.opt.touchable) {
         e.preventDefault();
         e.stopPropagation();
       }
@@ -136,6 +141,7 @@ QSwiper.prototype = {                     //              attrs : 'second',     
       }
       me.onStart = false;
       me.move(me.position);
+      me.interval();
     }
 
     $content.on($.fx.transitionEnd, function(e) {
