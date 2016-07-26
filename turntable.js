@@ -1,4 +1,4 @@
-(function (){
+(function() {
   var styleStr =
       '.qt-popup-wrap{position: fixed;top:50%;left: 50%; -webkit-transform: translate3d(-50%,-50%,10px);z-index: 1002;}' +
       '.qt-popup{background: #fff; -webkit-border-radius: 10px;}' +
@@ -29,78 +29,99 @@
 })();
 
 function Turntable(ele, options) {
-    this.opt = {
-        anchor: ele || '',                     //页面锚点
-        transitionTime: .5,                   //动画一圈时间
-        onEnded: function () {
-        }                                       //init完成
-    };
-    $.extend(this.opt, options);
-    this.init(this.opt);
+  this.opt = {
+    anchor: ele || '',                     //页面锚点
+    transitionTime: .5,                   //动画一圈时间
+    onEnded: function() {
+    }                                       //init完成
+  };
+  $.extend(this.opt, options);
+  this.init(this.opt);
 };
 
 Turntable.prototype = {
-    init: function (opt) {
-        var me = this, opt = me.opt, $anchor = $(opt.anchor);
-        me.stop = false;
-        me.endDeg = 0;
-        initListening();
-        initListeningTransitionEnd();
+  init: function(opt) {
+    var me = this, opt = me.opt, $anchor = $(opt.anchor);
+    me.stop = false;
+    me.endDeg = 0;
+    initListening();
+    initListeningTransitionEnd();
 
-        function initListening() {
-            $anchor.on('webkitAnimationIteration', function (e) {
-                var $this = $(this);
-                if (!me.stop) {
-                    return
-                }
-                $this.removeClass('qt-rotate');
-                var cssPrefix = $.fx.cssPrefix,
-                    cssData = {},
-                    stopDeg = (parseInt(me.endDeg) + 720),
-                    time = parseFloat(opt.transitionTime) / 360 * stopDeg * 1.5;
-                cssData[cssPrefix + 'transition-duration'] = '0' + 's';
-                cssData[cssPrefix + 'transition-timing-function'] = 'ease-out';
-                cssData[cssPrefix + 'transform'] = 'rotate(0deg) translate3d(0,0,0)';
-                $this.css(cssData);
-                setTimeout(function () {
-                    cssData[cssPrefix + 'transition-duration'] = time + 's';
-                    cssData[cssPrefix + 'transform'] = 'rotate(' + stopDeg + 'deg) translate3d(0,0,0)';
-                    $this.css(cssData);
-                }, 1)
-
-            })
+    function initListening() {
+      $anchor.on('webkitAnimationIteration', function(e) {
+        var $this = $(this);
+        if (!me.stop) {
+          return
         }
+        var cssPrefix = $.fx.cssPrefix,
+          cssData = {},
+          stopDeg = (parseInt(me.endDeg) + 720),
+          time = parseFloat(opt.transitionTime) / 360 * stopDeg * 1.5;
+        var computedStyle = document.defaultView.getComputedStyle($(opt.anchor)[0], null);
+        var deg = me.getmatrix(computedStyle.transform);
+        console.log(computedStyle);
+        console.log(deg);
+        //debugger
+        $this.removeClass('qt-rotate');
+        cssData[cssPrefix + 'transition-duration'] = '0' + 's';
+        cssData[cssPrefix + 'transition-timing-function'] = 'ease-out';
+        cssData[cssPrefix + 'transform'] = 'rotate(' + deg + 'deg) translate3d(0,0,0)';
+        $this.css(cssData);
+        setTimeout(function() {
+          cssData[cssPrefix + 'transition-duration'] = time + 's';
+          cssData[cssPrefix + 'transform'] = 'rotate(' + stopDeg + 'deg) translate3d(0,0,0)';
+          $this.css(cssData);
+        }, 1)
 
-        function initListeningTransitionEnd() {
-            $anchor.on($.fx.transitionEnd, function (e) {
-                me.opt.onEnded(parseInt(me.endDeg));
-            });
-        }
-
-    },
-    start: function () {
-      this.reset();
-        var $anchor = $(this.opt.anchor),
-            cssData = {},
-            cssPrefix = $.fx.cssPrefix;
-        cssData[cssPrefix + 'animation-timing-function'] = 'linear';
-        cssData[cssPrefix + 'animation-duration'] = this.opt.transitionTime + 's';
-        cssData[cssPrefix + 'animation-iteration-count'] = 'infinite';
-        cssData[cssPrefix + 'animation-direction'] = 'normal';
-        this.stop = false;
-        $anchor.css(cssData).addClass('qt-rotate');
-
-    },
-    endToDeg: function (endDeg) {
-        this.endDeg = endDeg || 0;
-        this.stop = true;
-    },
-    onEnded: function (endfun) {
-        this.opt.onEnded = endfun;
-    },
-    reset: function(){
-        $(this.opt.anchor).removeAttr('style');
+      })
     }
+
+    function initListeningTransitionEnd() {
+      $anchor.on($.fx.transitionEnd, function(e) {
+        me.opt.onEnded(parseInt(me.endDeg));
+      });
+    }
+
+  },
+  start: function() {
+    this.reset();
+    var $anchor = $(this.opt.anchor),
+      cssData = {},
+      cssPrefix = $.fx.cssPrefix;
+    cssData[cssPrefix + 'animation-timing-function'] = 'linear';
+    cssData[cssPrefix + 'animation-duration'] = this.opt.transitionTime + 's';
+    cssData[cssPrefix + 'animation-iteration-count'] = 'infinite';
+    cssData[cssPrefix + 'animation-direction'] = 'normal';
+    this.stop = false;
+    $anchor.css(cssData).addClass('qt-rotate');
+
+  },
+  endToDeg: function(endDeg) {
+    this.endDeg = endDeg || 0;
+    this.stop = true;
+  },
+  onEnded: function(endfun) {
+    this.opt.onEnded = endfun;
+  },
+  reset: function() {
+    $(this.opt.anchor).removeAttr('style');
+  },
+  getmatrix: function(matrix) {
+    matrix = matrix.match(/\((.*)\)/)[1].split(',');
+    var aa = Math.round(180 * Math.asin(matrix[0]) / Math.PI);
+    var bb = Math.round(180 * Math.acos(matrix[1]) / Math.PI);
+    var cc = Math.round(180 * Math.asin(matrix[2]) / Math.PI);
+    var dd = Math.round(180 * Math.acos(matrix[3]) / Math.PI);
+    var deg = 0;
+    if (aa == bb || -aa == bb) {
+      deg = dd;
+    } else if (-aa + bb == 180) {
+      deg = 180 + cc;
+    } else if (aa + bb == 180) {
+      deg = 360 - cc || 360 - dd;
+    }
+    return deg >= 360 ? 0 : deg;
+  }
 
 }
 ;
