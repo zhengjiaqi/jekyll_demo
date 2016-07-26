@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>H5转盘抽奖</title>
+  <meta charset="UTF-8">
+  <meta content="width=device-width,minimum-scale=1.00001,maximum-scale=1.00001,shrink-to-fit=no,user-scalable=no,minimal-ui"
+        name="viewport">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta content="telephone=no" name="format-detection"/>
+  <!-- UC默认竖屏 ，UC强制全屏 -->
+  <meta name="full-screen" content="yes"/>
+  <meta name="browsermode" content="application"/>
+  <!-- QQ强制竖屏 QQ强制全屏 -->
+  <meta name="x5-orientation" content="portrait"/>
+  <meta name="x5-fullscreen" content="true"/>
+  <meta name="x5-page-mode" content="app"/>
+  <link rel="stylesheet" href="http://m.qunar.com/zhuanti/animate.css" type="text/css">
+  <style type="text/css">
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    img {
+      width: 100%;
+    }
+
+    .wrap {
+      position: relative;
+    }
+
+    .start-button, .roate-arrow-wrap {
+      width: 30%;
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+    .start-button {
+      z-index: 2;
+    }
+
+    .roate-arrow-wrap {
+      width: 50%;
+    }
+
+    .qt-rotate {
+      animation-name: rotate;
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+  </style>
+</head>
+<body>
+<div class="init">
+  <div class="wrap">
+    <img class="turntable"
+         src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/23f51118af6f15bdea580bbb847636d1.jpg">
+    <img class="start-button" src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/start-lot.png">
+
+    <div class="roate-arrow-wrap">
+      <img class="roate-arrow"
+           src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/0e996bdfb75bfb1369b0a0800839f12f.png">
+    </div>
+  </div>
+  <div class="reset">reset</div>
+</div>
+
+<script type="text/javascript" src="http://m.qunar.com/zhuanti/zepto.src.js"></script>
+<script type="text/javascript" src="./turntable.js"></script>
+<script type="text/javascript" src="./randomNoRepeat.js"></script>
+
+
+<script>
+
+  (function() {
+    var doRandomNoRepeat = randomNoRepeat(6);
+    window.turntable = new Turntable('.roate-arrow');
+    $('.start-button').on('click', function() {
+      turntable.start();
+      setTimeout(function() {
+        turntable.endToDeg(doRandomNoRepeat() * 60)
+      }, 1000);
+      turntable.onEnded(function(endDeg){
+        console.log('endDeg:'+endDeg)
+      })
+    })
+    $('.reset').on('click', function() {
+      turntable.reset();
+    })
+  })();
+
+</script>
+</body>
+</html>
