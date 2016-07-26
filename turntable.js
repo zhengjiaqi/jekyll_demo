@@ -58,16 +58,15 @@ Turntable.prototype = {
                     cssData = {},
                     stopDeg = (parseInt(me.endDeg) + 720),
                     time = parseFloat(opt.transitionTime) / 360 * stopDeg * 1.5;
-                //cssData[cssPrefix + 'transition-duration'] = '0' + 's';
-                //cssData[cssPrefix + 'transition-timing-function'] = 'ease-out';
-                //cssData[cssPrefix + 'transform'] = 'rotate(0deg) translate3d(0,0,0)';
-                //$this.css(cssData);
+                cssData[cssPrefix + 'transition-duration'] = '0' + 's';
+                cssData[cssPrefix + 'transition-timing-function'] = 'ease-out';
+                cssData[cssPrefix + 'transform'] = 'rotate(0deg) translate3d(0,0,0)';
+                $this.css(cssData);
                 setTimeout(function () {
-                  cssData[cssPrefix + 'transition-timing-function'] = 'ease-out';
-                  cssData[cssPrefix + 'transition-duration'] = time + 's';
-                  cssData[cssPrefix + 'transform'] = 'rotate(' + stopDeg + 'deg) translate3d(0,0,0)';
-                  $this.css(cssData);
-                }, 0)
+                    cssData[cssPrefix + 'transition-duration'] = time + 's';
+                    cssData[cssPrefix + 'transform'] = 'rotate(' + stopDeg + 'deg) translate3d(0,0,0)';
+                    $this.css(cssData);
+                }, 1)
 
             })
         }
