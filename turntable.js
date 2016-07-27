@@ -124,7 +124,6 @@ Turntable.prototype = {
     }, 0)
   },
   endToDeg: function(endDeg) {
-    alert(endDeg+':::'+this.stop )
     this.endDeg = endDeg || 0;
     this.stop = true;
   },
