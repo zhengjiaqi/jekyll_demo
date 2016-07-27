@@ -39,6 +39,10 @@
     .qt-rotate {
       animation-name: rotate;
       -webkit-animation-name: rotate;
+      animation-duration : 1s;
+      -webkit-animation-duration : 1s;
+      animation-iteration-count: infinite;
+      -webkit-animation-iteration-count: infinite;
     }
 
     @keyframes -webkit-rotate {
@@ -46,7 +50,7 @@
         -webkit-transform: rotate(0deg) translate3d(0, 0, 0);
       }
       100% {
-        -webkit-transform: rotate(180deg) translate3d(0, 0, 0);
+        -webkit-transform: rotate(360deg) translate3d(0, 0, 0);
       }
     }
 
@@ -55,7 +59,7 @@
         transform: rotate(0deg) translate3d(0, 0, 0);
       }
       100% {
-        transform: rotate(180deg) translate3d(0, 0, 0);
+        transform: rotate(360deg) translate3d(0, 0, 0);
       }
     }
 
@@ -81,7 +85,7 @@
     <img class="start-button" src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/start-lot.png">
 
     <div class="roate-arrow-wrap">
-      <img class="roate-arrow"
+      <img class="roate-arrow qt-rotate"
            src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/0e996bdfb75bfb1369b0a0800839f12f.png">
     </div>
   </div>
