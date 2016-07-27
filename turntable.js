@@ -73,7 +73,7 @@ Turntable.prototype = {
     if (me.started) {
       return;
     }
-
+    me.started = true;
     if (me.endDeg != 0 && me.endDeg != 360) {
       $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
         setAnimation();
@@ -92,7 +92,6 @@ Turntable.prototype = {
       cssData[cssPrefix + 'animation-direction'] = 'normal';
       $anchor.css(cssData).addClass('qt-rotate');
       me.stop = false;
-      me.started = true;
     }
 
   },
