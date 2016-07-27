@@ -59,7 +59,7 @@
       }
     }
 
-    .reset, .stop {
+    .reset, .stop ,.stop-deg{
       line-height: 40px;
       background: #8ad9dd;
       padding: 0 10px;
@@ -70,6 +70,9 @@
 
     .stop {
       background: #fc9fa6;
+    }
+    .stop-deg{
+      background: #b6cd89;
     }
 
   </style>
@@ -88,6 +91,7 @@
   </div>
   <div class="reset">reset</div>
   <div class="stop">stop</div>
+  <div class="stop-deg"></div>
 </div>
 
 <script type="text/javascript" src="http://m.qunar.com/zhuanti/zepto.src.js"></script>
@@ -101,7 +105,7 @@
     var doRandomNoRepeat = randomNoRepeat(6);
     window.turntable = new Turntable('.roate-arrow');
     turntable.onEnded(function(endDeg) {
-      console.log('endDeg:' + endDeg)
+      $('.stop-deg').html('endDeg:' + endDeg)
     });
     $('.start-button').on('click', function() {
       turntable.start();
