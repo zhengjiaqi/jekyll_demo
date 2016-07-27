@@ -50,14 +50,13 @@ Turntable.prototype = {
 
     function initListening() {
       $anchor.on('webkitAnimationIteration animationIteration', function(e) {
-        var $this = $(this);
         if (!me.stop) {
           return
         }
-        alert(me.stop+'setTransform111')
         var computedStyle = document.defaultView.getComputedStyle($anchor[0], null);
         var startDeg = me.getmatrix(computedStyle.transform);
-        $this.removeClass('qt-rotate');
+        $anchor.removeClass('qt-rotate');
+        alert(me.stop+'setTransform222')
         var stopDeg = (me.endDeg + me.addDeg);
         $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
           me.opt.onEnded(me.endDeg);
