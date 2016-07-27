@@ -57,7 +57,7 @@ Turntable.prototype = {
         var startDeg = me.getmatrix(computedStyle.transform);
         $this.removeClass('qt-rotate');
         var stopDeg = (parseInt(me.endDeg) + 720);
-        $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
+        $anchor.off('webkitTransitionEnd transitionEnd').one('webkitTransitionEnd transitionEnd', function(e) {
           me.opt.onEnded(parseInt(me.endDeg));
           me.started = false;
         });
@@ -75,7 +75,7 @@ Turntable.prototype = {
     }
     me.started = true;
     if (me.endDeg != 0 && me.endDeg != 360) {
-      $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
+      $anchor.off('webkitTransitionEnd transitionEnd').one('webkitTransitionEnd transitionEnd', function(e) {
         setAnimation();
       });
       me.setTransform(parseInt(me.endDeg) + 720, 360 + 720, true);
