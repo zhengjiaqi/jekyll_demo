@@ -54,8 +54,8 @@ Turntable.prototype = {
           return
         }
         var computedStyle = window.getComputedStyle($anchor[0], null);
-        alert(JSON.stringify(computedStyle))
-        var startDeg = me.getmatrix(computedStyle.transform);
+        var transform = computedStyle.transform;
+        var startDeg = transform ? me.getmatrix(transform) : 0;
         $anchor.removeClass('qt-rotate');
         alert(me.stop+'setTransform333')
         var stopDeg = (me.endDeg + me.addDeg);
