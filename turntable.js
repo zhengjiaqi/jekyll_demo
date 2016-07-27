@@ -45,6 +45,7 @@ Turntable.prototype = {
     me.stop = false;
     me.started = false;
     me.endDeg = 0;
+    me.addDeg = 720;
     initListening();
 
     function initListening() {
@@ -56,9 +57,9 @@ Turntable.prototype = {
         var computedStyle = document.defaultView.getComputedStyle($anchor[0], null);
         var startDeg = me.getmatrix(computedStyle.transform);
         $this.removeClass('qt-rotate');
-        var stopDeg = (parseInt(me.endDeg) + 720);
+        var stopDeg = (me.endDeg + me.addDeg);
         $anchor.off('webkitTransitionEnd transitionEnd').one('webkitTransitionEnd transitionEnd', function(e) {
-          me.opt.onEnded(parseInt(me.endDeg));
+          me.opt.onEnded(me.endDeg);
           me.started = false;
         });
         me.setTransform(startDeg, stopDeg);
@@ -78,20 +79,21 @@ Turntable.prototype = {
       $anchor.off('webkitTransitionEnd transitionEnd').one('webkitTransitionEnd transitionEnd', function(e) {
         setAnimation();
       });
-      me.setTransform(parseInt(me.endDeg) + 720, 360 + 720, true);
+      me.setTransform(me.endDeg + me.addDeg, 360 + me.addDeg, true);
     } else {
       setAnimation();
     }
 
     function setAnimation() {
       var cssData = {},
-        cssPrefix = '-webkit-';
+        cssPrefix = $.fx.cssPrefix;
       cssData[cssPrefix + 'animation-timing-function'] = 'linear';
       cssData[cssPrefix + 'animation-duration'] = me.opt.transitionTime + 's';
       cssData[cssPrefix + 'animation-iteration-count'] = 'infinite';
       cssData[cssPrefix + 'animation-direction'] = 'normal';
       $anchor.css(cssData).removeClass('qt-rotate');
       setTimeout(function() {
+        alert("addClass('qt-rotate')");
         $anchor.addClass('qt-rotate');
       }, 0)
       me.stop = false;
@@ -101,7 +103,7 @@ Turntable.prototype = {
   setTransform: function(startDeg, stopDeg, linear) {
     var me = this,
       $anchor = $(me.opt.anchor);
-    var cssPrefix = '-webkit-',
+    var cssPrefix = $.fx.cssPrefix,
       cssData = {},
       time;
     var degPoor = stopDeg - startDeg;
