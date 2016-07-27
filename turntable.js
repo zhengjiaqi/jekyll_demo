@@ -85,7 +85,7 @@ Turntable.prototype = {
 
     function setAnimation() {
       var cssData = {},
-        cssPrefix = $.fx.cssPrefix;
+        cssPrefix = '-webkit-';
       cssData[cssPrefix + 'animation-timing-function'] = 'linear';
       cssData[cssPrefix + 'animation-duration'] = me.opt.transitionTime + 's';
       cssData[cssPrefix + 'animation-iteration-count'] = 'infinite';
@@ -101,7 +101,7 @@ Turntable.prototype = {
   setTransform: function(startDeg, stopDeg, linear) {
     var me = this,
       $anchor = $(me.opt.anchor);
-    var cssPrefix = $.fx.cssPrefix,
+    var cssPrefix = '-webkit-',
       cssData = {},
       time;
     var degPoor = stopDeg - startDeg;
