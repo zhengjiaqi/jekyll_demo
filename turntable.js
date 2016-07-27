@@ -50,6 +50,7 @@ Turntable.prototype = {
 
     function initListening() {
       $anchor.on('webkitAnimationIteration animationIteration', function(e) {
+        alert('webkitAnimationIteration')
         var $this = $(this);
         if (!me.stop) {
           return
