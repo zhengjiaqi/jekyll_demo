@@ -39,27 +39,23 @@
     .qt-rotate {
       animation-name: rotate;
       -webkit-animation-name: rotate;
-      animation-duration : 1s;
-      -webkit-animation-duration : 1s;
-      animation-iteration-count: infinite;
-      -webkit-animation-iteration-count: infinite;
     }
 
     @-webkit-keyframes rotate {
       0% {
-        -webkit-transform: rotate(0deg) ;
+        -webkit-transform: rotate(0deg) translate3d(0, 0, 0);
       }
       100% {
-        -webkit-transform: rotate(360deg) ;
+        -webkit-transform: rotate(360deg) translate3d(0, 0, 0);
       }
     }
 
     @keyframes rotate {
       0% {
-        transform: rotate(0deg) ;
+        transform: rotate(0deg) translate3d(0, 0, 0);
       }
       100% {
-        transform: rotate(360deg) ;
+        transform: rotate(360deg) translate3d(0, 0, 0);
       }
     }
 
@@ -71,7 +67,8 @@
       margin-left: 20px;
       border-radius: 10px;
     }
-    .stop{
+
+    .stop {
       background: #fc9fa6;
     }
 
@@ -85,7 +82,7 @@
     <img class="start-button" src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/start-lot.png">
 
     <div class="roate-arrow-wrap">
-      <img class="roate-arrow qt-rotate"
+      <img class="roate-arrow"
            src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/0e996bdfb75bfb1369b0a0800839f12f.png">
     </div>
   </div>
@@ -109,8 +106,8 @@
     $('.start-button').on('click', function() {
       turntable.start();
     })
-    $('.stop').on('click',function(){
-        turntable.endToDeg(doRandomNoRepeat() * 60)
+    $('.stop').on('click', function() {
+      turntable.endToDeg(doRandomNoRepeat() * 60)
     })
     $('.reset').on('click', function() {
       turntable.reset();

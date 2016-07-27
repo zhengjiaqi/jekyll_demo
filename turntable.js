@@ -93,7 +93,6 @@ Turntable.prototype = {
       cssData[cssPrefix + 'animation-direction'] = 'normal';
       $anchor.css(cssData).removeClass('qt-rotate');
       setTimeout(function() {
-        alert("addClass('qt-rotate3')");
         $anchor.addClass('qt-rotate');
       }, 0)
       me.stop = false;
