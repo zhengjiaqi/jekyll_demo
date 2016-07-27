@@ -48,6 +48,16 @@
 
     .qt-rotate {
       animation-name: rotate;
+      -webkit-animation-name: rotate;
+    }
+
+    @keyframes -webkit-rotate {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
     }
 
     @keyframes rotate {
@@ -87,7 +97,6 @@
     var doRandomNoRepeat = randomNoRepeat(6);
     window.turntable = new Turntable('.roate-arrow');
     $('.start-button').on('click', function() {
-      alert('click')
       turntable.start();
       setTimeout(function() {
         turntable.endToDeg(doRandomNoRepeat() * 60)
@@ -98,7 +107,6 @@
     })
     $('.reset').on('click', function() {
       turntable.reset();
-      alert('click')
     })
   })();
 
