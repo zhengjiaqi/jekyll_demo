@@ -126,6 +126,8 @@ Turntable.prototype = {
     this.opt.onEnded = endfun;
   },
   reset: function() {
+    this.stop = false;
+    this.started = false;
     this.endDeg = 0;
     $(this.opt.anchor).removeAttr('style');
   },
