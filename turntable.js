@@ -126,6 +126,7 @@ Turntable.prototype = {
     this.opt.onEnded = endfun;
   },
   reset: function() {
+    this.endDeg = 0;
     $(this.opt.anchor).removeAttr('style');
   },
   getmatrix: function(matrix) {
