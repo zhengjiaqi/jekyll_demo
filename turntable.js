@@ -51,10 +51,10 @@ Turntable.prototype = {
     function initListening() {
       $anchor.on('webkitAnimationIteration animationIteration', function(e) {
         var $this = $(this);
-        alert(me.stop+'setTransform')
         if (!me.stop) {
           return
         }
+        alert(me.stop+'setTransform111')
         var computedStyle = document.defaultView.getComputedStyle($anchor[0], null);
         var startDeg = me.getmatrix(computedStyle.transform);
         $this.removeClass('qt-rotate');
