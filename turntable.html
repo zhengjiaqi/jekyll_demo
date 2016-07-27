@@ -33,12 +33,14 @@
     }
 
     .roate-arrow-wrap {
-      width: 49%;
+      width: 48%;
     }
 
     .qt-rotate {
       animation-name: rotate;
       -webkit-animation-name: rotate;
+      -webkit-animation-iteration-count:infinite;
+      -webkit-animation-duration: 2s;
     }
 
     @keyframes -webkit-rotate {
@@ -69,7 +71,7 @@
     <img class="start-button" src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/start-lot.png">
 
     <div class="roate-arrow-wrap">
-      <img class="roate-arrow"
+      <img class="roate-arrow qt-rotate"
            src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/0e996bdfb75bfb1369b0a0800839f12f.png">
     </div>
   </div>
