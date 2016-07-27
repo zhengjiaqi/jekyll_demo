@@ -39,25 +39,23 @@
     .qt-rotate {
       animation-name: rotate;
       -webkit-animation-name: rotate;
-      -webkit-animation-iteration-count:infinite;
-      -webkit-animation-duration: 2s;
     }
 
     @keyframes -webkit-rotate {
       0% {
-        -webkit-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg) translate3d(0,0,0);
       }
       100% {
-        -webkit-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg) translate3d(0,0,0);
       }
     }
 
     @keyframes rotate {
       0% {
-        transform: rotate(0deg);
+        transform: rotate(0deg) translate3d(0,0,0);
       }
       100% {
-        transform: rotate(360deg);
+        transform: rotate(360deg) translate3d(0,0,0);
       }
     }
 
@@ -71,7 +69,7 @@
     <img class="start-button" src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/start-lot.png">
 
     <div class="roate-arrow-wrap">
-      <img class="roate-arrow qt-rotate"
+      <img class="roate-arrow"
            src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/0e996bdfb75bfb1369b0a0800839f12f.png">
     </div>
   </div>
@@ -89,7 +87,6 @@
     var doRandomNoRepeat = randomNoRepeat(6);
     window.turntable = new Turntable('.roate-arrow');
     $('.start-button').on('click', function() {
-      alert('111')
       turntable.start();
       setTimeout(function() {
         turntable.endToDeg(doRandomNoRepeat() * 60)
