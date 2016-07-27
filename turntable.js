@@ -59,6 +59,7 @@ Turntable.prototype = {
           time = parseFloat(opt.transitionTime) / 360 * stopDeg * 1.5;
         var computedStyle = document.defaultView.getComputedStyle($(opt.anchor)[0], null);
         var deg = me.getmatrix(computedStyle.transform);
+        console.log(computedStyle.transform);
         console.log(computedStyle);
         console.log(deg);
         //debugger

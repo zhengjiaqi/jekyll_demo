@@ -87,6 +87,7 @@
     var doRandomNoRepeat = randomNoRepeat(6);
     window.turntable = new Turntable('.roate-arrow');
     $('.start-button').on('click', function() {
+      alert('click')
       turntable.start();
       setTimeout(function() {
         turntable.endToDeg(doRandomNoRepeat() * 60)
@@ -97,6 +98,7 @@
     })
     $('.reset').on('click', function() {
       turntable.reset();
+      alert('click')
     })
   })();
 
