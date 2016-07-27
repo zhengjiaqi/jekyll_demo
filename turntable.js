@@ -49,7 +49,7 @@ Turntable.prototype = {
     initListening();
 
     function initListening() {
-      $anchor.on('webkitAnimationIteration', function(e) {
+      $anchor.on('webkitAnimationIteration animationIteration', function(e) {
         var $this = $(this);
         if (!me.stop) {
           return
@@ -58,7 +58,7 @@ Turntable.prototype = {
         var startDeg = me.getmatrix(computedStyle.transform);
         $this.removeClass('qt-rotate');
         var stopDeg = (me.endDeg + me.addDeg);
-        $anchor.one('webkitTransitionEnd', function(e) {
+        $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
           me.opt.onEnded(me.endDeg);
           me.started = false;
         });
@@ -76,7 +76,7 @@ Turntable.prototype = {
     }
     me.started = true;
     if (me.endDeg != 0 && me.endDeg != 360) {
-      $anchor.one('webkitTransitionEnd', function(e) {
+      $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
         setAnimation();
       });
       me.setTransform(me.endDeg + me.addDeg, 360 + me.addDeg, true);
