@@ -119,6 +119,7 @@ Turntable.prototype = {
     }
     setTimeout(function() {
       cssData[cssPrefix + 'transition-duration'] = time + 's';
+      cssData[cssPrefix + 'transition-property'] = 'all';
       cssData[cssPrefix + 'transform'] = 'rotate(' + stopDeg + 'deg) translate3d(0,0,0)';
       $anchor.css(cssData);
     }, 0)
