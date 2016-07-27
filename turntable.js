@@ -94,7 +94,10 @@ Turntable.prototype = {
     cssData[cssPrefix + 'animation-iteration-count'] = 'infinite';
     cssData[cssPrefix + 'animation-direction'] = 'normal';
     this.stop = false;
-    $anchor.css(cssData).addClass('qt-rotate');
+    $anchor.css(cssData);
+    setTimeout(function(){
+      $anchor.addClass('qt-rotate');
+    },0)
 
   },
   endToDeg: function(endDeg) {
