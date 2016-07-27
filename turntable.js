@@ -51,6 +51,7 @@ Turntable.prototype = {
     function initListening() {
       $anchor.on('webkitAnimationIteration animationIteration', function(e) {
         var $this = $(this);
+        alert(me.stop+'setTransform')
         if (!me.stop) {
           return
         }
@@ -62,7 +63,6 @@ Turntable.prototype = {
           me.opt.onEnded(me.endDeg);
           me.started = false;
         });
-        alert(me.stop+'setTransform')
         me.setTransform(startDeg, stopDeg);
 
       })
