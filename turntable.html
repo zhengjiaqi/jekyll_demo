@@ -87,19 +87,20 @@
 
   (function() {
     var doRandomNoRepeat = randomNoRepeat(6);
-//    window.turntable = new Turntable('.roate-arrow');
-//    $('.start-button').on('click', function() {
-//      turntable.start();
-//      setTimeout(function() {
-//        turntable.endToDeg(doRandomNoRepeat() * 60)
-//      }, 1000);
-//      turntable.onEnded(function(endDeg){
-//        console.log('endDeg:'+endDeg)
-//      })
-//    })
-//    $('.reset').on('click', function() {
-//      turntable.reset();
-//    })
+    window.turntable = new Turntable('.roate-arrow');
+    $('.start-button').on('click', function() {
+      alert('111')
+      turntable.start();
+      setTimeout(function() {
+        turntable.endToDeg(doRandomNoRepeat() * 60)
+      }, 1000);
+      turntable.onEnded(function(endDeg){
+        console.log('endDeg:'+endDeg)
+      })
+    })
+    $('.reset').on('click', function() {
+      turntable.reset();
+    })
   })();
 
 </script>
