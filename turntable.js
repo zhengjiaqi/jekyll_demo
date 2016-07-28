@@ -119,10 +119,12 @@ Turntable.prototype = {
       cssData[cssPrefix + 'transform'] = 'rotate(' + startDeg + 'deg) translate3d(0,0,0)';
       $anchor.css(cssData);
     }
-    cssData[cssPrefix + 'transition-duration'] = time + 's';
-    cssData[cssPrefix + 'transition-property'] = 'all';
-    cssData[cssPrefix + 'transform'] = 'rotate(' + stopDeg + 'deg) translate3d(0,0,0)';
-    $anchor.css(cssData);
+    setTimeout(function() {
+      cssData[cssPrefix + 'transition-duration'] = time + 's';
+      cssData[cssPrefix + 'transition-property'] = 'all';
+      cssData[cssPrefix + 'transform'] = 'rotate(' + stopDeg + 'deg) translate3d(0,0,0)';
+      $anchor.css(cssData);
+    }, 0)
   },
   //停止到某个角度 0~360deg
   endToDeg: function(endDeg) {
