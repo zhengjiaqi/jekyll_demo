@@ -84,7 +84,7 @@ Turntable.prototype = {
       $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
         var cssData = {}
         cssData[me.cssPrefix + 'transform'] = '';
-        cssData[cssPrefix + 'transition-duration'] = '0' + 's'
+        cssData[cssPrefix + 'transition-duration'] = '0' + 's';
         $anchor.css(cssData);
         //setTimeout(setAnimation,0);
         setAnimation();
@@ -93,6 +93,7 @@ Turntable.prototype = {
     } else {
       var cssData = {}
       cssData[me.cssPrefix + 'transform'] = '';
+      cssData[cssPrefix + 'transition-duration'] = '0' + 's';
       $anchor.css(cssData);
       setAnimation();
     }
