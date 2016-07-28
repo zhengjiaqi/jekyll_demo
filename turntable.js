@@ -62,7 +62,7 @@ Turntable.prototype = {
         //  startDeg = me.getmatrix(computedStyle.transform);
         //}
         var stopDeg = (me.endDeg + me.bufferDeg);
-        $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
+        $anchor.off('webkitTransitionEnd transitionEnd').one('webkitTransitionEnd transitionEnd', function(e) {
           me.opt.onEnded(me.endDeg);
           me.started = false;
         });
@@ -81,7 +81,7 @@ Turntable.prototype = {
     }
     me.started = true;
     if (me.endDeg != 0 && me.endDeg != 360) {
-      $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
+      $anchor.off('webkitTransitionEnd transitionEnd').one('webkitTransitionEnd transitionEnd', function(e) {
         setAnimation();
       });
       me.setTransform(me.endDeg + me.bufferDeg, 360 + me.bufferDeg, true);
