@@ -115,7 +115,7 @@ Turntable.prototype = {
     } else {
       time = parseFloat(me.opt.transitionTime) / 360 * degPoor * 1.5;
       cssData[cssPrefix + 'transition-timing-function'] = 'ease-out';
-      cssData[cssPrefix + 'transition-duration'] = '0' + 's';
+      //cssData[cssPrefix + 'transition-duration'] = '0' + 's';
       cssData[cssPrefix + 'transform'] = 'rotate(' + startDeg + 'deg) translate3d(0,0,0)';
       $anchor.css(cssData);
     }
@@ -124,7 +124,7 @@ Turntable.prototype = {
       cssData[cssPrefix + 'transition-property'] = 'all';
       cssData[cssPrefix + 'transform'] = 'rotate(' + stopDeg + 'deg) translate3d(0,0,0)';
       $anchor.css(cssData);
-    }, 10)
+    }, 0)
   },
   //停止到某个角度 0~360deg
   endToDeg: function(endDeg) {
