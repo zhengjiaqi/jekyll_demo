@@ -56,17 +56,17 @@ Turntable.prototype = {
         if (!me.stop) {
           return
         }
-        var computedStyle = window.getComputedStyle(anchor, null);
-        var startDeg = 0;
-        if (computedStyle && computedStyle.transform) {
-          startDeg = me.getmatrix(computedStyle.transform);
-        }
+        //var computedStyle = window.getComputedStyle(anchor, null);
+        //var startDeg = 0;
+        //if (computedStyle && computedStyle.transform) {
+        //  startDeg = me.getmatrix(computedStyle.transform);
+        //}
         var stopDeg = (me.endDeg + me.bufferDeg);
         $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
           me.opt.onEnded(me.endDeg);
           me.started = false;
         });
-        me.setTransform(startDeg, stopDeg);
+        me.setTransform(0, stopDeg);
         $anchor.removeClass('qt-rotate');
 
       })
