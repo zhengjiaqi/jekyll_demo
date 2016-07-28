@@ -89,6 +89,9 @@ Turntable.prototype = {
       });
       me.setTransform(me.endDeg + me.bufferDeg, 360 + me.bufferDeg, true);
     } else {
+      var cssData = {}
+      cssData[me.cssPrefix + 'transform'] = '';
+      $anchor.css(cssData);
       setAnimation();
     }
 
