@@ -76,13 +76,12 @@ Turntable.prototype = {
   start: function() {
     var me = this,
       $anchor = $(this.opt.anchor);
-    if (me.started) {
-      return;
-    }
+    //if (me.started) {
+    //  return;
+    //}
     me.started = true;
     if (me.endDeg != 0 && me.endDeg != 360) {
       $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
-        alert($anchor.attr('class'));
         setAnimation();
       });
       me.setTransform(me.endDeg + me.bufferDeg, 360 + me.bufferDeg, true);
@@ -99,10 +98,7 @@ Turntable.prototype = {
       cssData[cssPrefix + 'animation-duration'] = me.opt.transitionTime + 's';
       cssData[cssPrefix + 'animation-iteration-count'] = 'infinite';
       cssData[cssPrefix + 'animation-direction'] = 'normal';
-      $anchor.css(cssData).removeClass('qt-rotate');
-      setTimeout(function(){
-        $anchor.addClass('qt-rotate');
-      },20)
+      $anchor.css(cssData).addClass('qt-rotate');
       me.stop = false;
     }
 
