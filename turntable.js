@@ -62,7 +62,7 @@ Turntable.prototype = {
         //  startDeg = me.getmatrix(computedStyle.transform);
         //}
         var stopDeg = (me.endDeg + me.bufferDeg);
-        $anchor.off('webkitTransitionEnd transitionEnd').one('webkitTransitionEnd transitionEnd', function(e) {
+        $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
           me.opt.onEnded(me.endDeg);
           me.started = false;
         });
@@ -81,7 +81,7 @@ Turntable.prototype = {
     }
     me.started = true;
     if (me.endDeg != 0 && me.endDeg != 360) {
-      $anchor.off('webkitTransitionEnd transitionEnd').one('webkitTransitionEnd transitionEnd', function(e) {
+      $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
         setAnimation();
       });
       me.setTransform(me.endDeg + me.bufferDeg, 360 + me.bufferDeg, true);
@@ -119,9 +119,9 @@ Turntable.prototype = {
     } else {
       time = parseFloat(me.opt.transitionTime) / 360 * degPoor * 1.5;
       cssData[cssPrefix + 'transition-timing-function'] = 'ease-out';
-      cssData[cssPrefix + 'transition-duration'] = '0' + 's';
-      cssData[cssPrefix + 'transform'] = 'rotate(' + startDeg + 'deg) translate3d(0,0,0)';
-      $anchor.css(cssData);
+      //cssData[cssPrefix + 'transition-duration'] = '0' + 's';
+      //cssData[cssPrefix + 'transform'] = 'rotate(' + startDeg + 'deg) translate3d(0,0,0)';
+      //$anchor.css(cssData);
     }
     setTimeout(function() {
       cssData[cssPrefix + 'transition-duration'] = time + 's';
