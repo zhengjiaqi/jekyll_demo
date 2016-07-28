@@ -56,17 +56,17 @@ Turntable.prototype = {
         if (!me.stop) {
           return
         }
-        //var computedStyle = window.getComputedStyle(anchor, null);
-        //var startDeg = 0;
-        //if (computedStyle && computedStyle.transform) {
-        //  startDeg = me.getmatrix(computedStyle.transform);
-        //}
+        var computedStyle = window.getComputedStyle(anchor, null);
+        var startDeg = 0;
+        if (computedStyle && computedStyle.transform) {
+          startDeg = me.getmatrix(computedStyle.transform);
+        }
         var stopDeg = (me.endDeg + me.bufferDeg);
         $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
           me.opt.onEnded(me.endDeg);
           me.started = false;
         });
-        me.setTransform(0, stopDeg);
+        me.setTransform(startDeg, stopDeg);
         $anchor.removeClass('qt-rotate');
 
       })
@@ -119,9 +119,9 @@ Turntable.prototype = {
     } else {
       time = parseFloat(me.opt.transitionTime) / 360 * degPoor * 1.5;
       cssData[cssPrefix + 'transition-timing-function'] = 'ease-out';
-      //cssData[cssPrefix + 'transition-duration'] = '0' + 's';
-      //cssData[cssPrefix + 'transform'] = 'rotate(' + startDeg + 'deg) translate3d(0,0,0)';
-      //$anchor.css(cssData);
+      cssData[cssPrefix + 'transition-duration'] = '0' + 's';
+      cssData[cssPrefix + 'transform'] = 'rotate(' + startDeg + 'deg) translate3d(0,0,0)';
+      $anchor.css(cssData);
     }
     setTimeout(function() {
       cssData[cssPrefix + 'transition-duration'] = time + 's';
