@@ -102,7 +102,7 @@ Turntable.prototype = {
       $anchor.css(cssData).removeClass('qt-rotate');
       setTimeout(function(){
         $anchor.addClass('qt-rotate');
-      },0)
+      },20)
       me.stop = false;
     }
 
