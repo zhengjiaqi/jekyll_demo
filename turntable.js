@@ -43,7 +43,7 @@ function Turntable(ele, options) {
 
 Turntable.prototype = {
   init: function(opt) {
-    var me = this, opt = me.opt, $anchor = $(opt.anchor);
+    var me = this, opt = me.opt, $anchor = $(opt.anchor), anchor = $anchor[0];
     me.stop = false;
     me.started = false;
     me.endDeg = 0;
@@ -55,16 +55,18 @@ Turntable.prototype = {
         if (!me.stop) {
           return
         }
-        var computedStyle = window.getComputedStyle($anchor[0], null);
-        var transform = computedStyle.transform;
-        var startDeg = transform ? me.getmatrix(transform) : 0;
-        $anchor.removeClass('qt-rotate');
+        var computedStyle = window.getComputedStyle(anchor, null);
+        var startDeg = 0;
+        if (computedStyle && computedStyle.transform) {
+          startDeg = me.getmatrix(computedStyle.transform);
+        }
         var stopDeg = (me.endDeg + me.bufferDeg);
         $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
           me.opt.onEnded(me.endDeg);
           me.started = false;
         });
         me.setTransform(startDeg, stopDeg);
+        $anchor.removeClass('qt-rotate');
 
       })
     }
@@ -94,9 +96,9 @@ Turntable.prototype = {
       cssData[cssPrefix + 'animation-iteration-count'] = 'infinite';
       cssData[cssPrefix + 'animation-direction'] = 'normal';
       $anchor.css(cssData).removeClass('qt-rotate');
-      setTimeout(function(){
+      setTimeout(function() {
         $anchor.addClass('qt-rotate');
-      },0)
+      }, 0)
       me.stop = false;
     }
 
