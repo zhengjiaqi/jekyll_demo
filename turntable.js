@@ -84,8 +84,10 @@ Turntable.prototype = {
       $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
         var cssData = {}
         cssData[me.cssPrefix + 'transform'] = '';
+        cssData[cssPrefix + 'transition-duration'] = '0' + 's'
         $anchor.css(cssData);
-        setAnimation();
+        setTimeout(setAnimation,0);
+        //setAnimation();
       });
       me.setTransform(me.endDeg + me.bufferDeg, 360 + me.bufferDeg, true);
     } else {
