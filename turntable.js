@@ -82,7 +82,7 @@ Turntable.prototype = {
     me.started = true;
     if (me.endDeg != 0 && me.endDeg != 360) {
       $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
-        alert('webkitTransitionEnd')
+        alert($anchor.attr('class'));
         setAnimation();
       });
       me.setTransform(me.endDeg + me.bufferDeg, 360 + me.bufferDeg, true);
