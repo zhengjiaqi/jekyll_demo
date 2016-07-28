@@ -93,12 +93,12 @@
       turntable.start();
       if($('.auto-stop-check').prop('checked') == true){
         setTimeout(function(){
-          turntable.endToDeg(doRandomNoRepeat() * 60)
+          turntable.endToDeg((doRandomNoRepeat()+1) * 60)
         },parseInt($('.auto-stop-input').val())*1000)
       }
     })
     $('.stop').on('click', function() {
-      turntable.endToDeg(doRandomNoRepeat() * 60)
+      turntable.endToDeg((doRandomNoRepeat()+1) * 60)
     })
     $('.reset').on('click', function() {
       turntable.reset();
