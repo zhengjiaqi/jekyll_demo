@@ -124,7 +124,7 @@ Turntable.prototype = {
       cssData[cssPrefix + 'transition-property'] = 'all';
       cssData[cssPrefix + 'transform'] = 'rotate(' + stopDeg + 'deg) translate3d(0,0,0)';
       $anchor.css(cssData);
-    }, 0)
+    }, 10)
   },
   //停止到某个角度 0~360deg
   endToDeg: function(endDeg) {
