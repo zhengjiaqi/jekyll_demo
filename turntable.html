@@ -36,29 +36,6 @@
       width: 48%;
     }
 
-    .qt-rotate {
-      animation-name: rotate;
-      -webkit-animation-name: rotate;
-    }
-
-    @-webkit-keyframes rotate {
-      0% {
-        -webkit-transform: rotate(0deg) translate3d(0, 0, 0);
-      }
-      100% {
-        -webkit-transform: rotate(360deg) translate3d(0, 0, 0);
-      }
-    }
-
-    @keyframes rotate {
-      0% {
-        transform: rotate(0deg) translate3d(0, 0, 0);
-      }
-      100% {
-        transform: rotate(360deg) translate3d(0, 0, 0);
-      }
-    }
-
     .reset, .stop ,.stop-deg{
       line-height: 40px;
       background: #8ad9dd;
@@ -89,6 +66,11 @@
            src="http://source.qunar.com/site/images/wap/touch/images/v2/images1x/0e996bdfb75bfb1369b0a0800839f12f.png">
     </div>
   </div>
+  <div class="auto-stop">
+    <label><input class="auto-stop-check" type="checkbox" name="select" checked="checked" data-type="slideDown"/></label>
+    <input class="auto-stop-input" type="number" value="1" style="width: 20px"/>
+    秒后自动停止
+  </div>
   <div class="reset">reset</div>
   <div class="stop">stop</div>
   <div class="stop-deg"></div>
@@ -109,6 +91,11 @@
     });
     $('.start-button').on('click', function() {
       turntable.start();
+      if($('.auto-stop-check').prop('checked') == true){
+        setTimeout(function(){
+          turntable.endToDeg(doRandomNoRepeat() * 60)
+        },parseInt($('.auto-stop-input').val())*1000)
+      }
     })
     $('.stop').on('click', function() {
       turntable.endToDeg(doRandomNoRepeat() * 60)
