@@ -28,8 +28,13 @@
   style.innerHTML = styleStr;
   $('head').append(style);
 })();
-
-function Turntable(ele, options) {
+/**
+ * 高性能异步抽奖转盘
+ * @param {dom} ele dom容器
+ * @param {Object} options 配置参数
+ * @param {Object} $ zepto
+ */
+function Turntable(ele, options, $) {
   this.opt = {
     anchor: ele || '',                     //页面锚点
     transitionTime: .5,                    //动画一圈时间
@@ -37,6 +42,7 @@ function Turntable(ele, options) {
     onEnded: function() {
     }
   };
+  $ = $ || window.$;
   $.extend(this.opt, options);
   this.init(this.opt);
 };
@@ -50,16 +56,20 @@ Turntable.prototype = {
     me.bufferDeg = opt.bufferDeg;
     me.cssPrefix = $.fx.cssPrefix;
     initListening();
+    var canGetComputedStyle = false;
+    window.getComputedStyle && (canGetComputedStyle = true);
 
     function initListening() {
       $anchor.on('webkitAnimationIteration animationIteration', function(e) {
         if (!me.stop) {
           return
         }
-        var computedStyle = window.getComputedStyle(anchor, null);
         var startDeg = 0;
-        if (computedStyle && computedStyle.transform) {
-          startDeg = me.getmatrix(computedStyle.transform);
+        if (canGetComputedStyle) {
+          var computedStyle = window.getComputedStyle(anchor, null);
+          if (computedStyle && computedStyle.transform) {
+            startDeg = me.getmatrix(computedStyle.transform);
+          }
         }
         var stopDeg = (me.endDeg + me.bufferDeg);
         $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
@@ -157,5 +167,4 @@ Turntable.prototype = {
     return deg >= 360 ? 0 : deg;
   }
 
-}
-;
+};
