@@ -82,8 +82,9 @@ Turntable.prototype = {
     me.started = true;
     if (me.endDeg != 0 && me.endDeg != 360) {
       $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
-        var cssData = {}
-        cssData[me.cssPrefix + 'transform'] = '';
+        var cssData = {},
+          cssPrefix = me.cssPrefix;
+        cssData[cssPrefix + 'transform'] = '';
         cssData[cssPrefix + 'transition-duration'] = '0' + 's';
         $anchor.css(cssData);
         //setTimeout(setAnimation,0);
@@ -91,8 +92,9 @@ Turntable.prototype = {
       });
       me.setTransform(me.endDeg + me.bufferDeg, 360 + me.bufferDeg, true);
     } else {
-      var cssData = {}
-      cssData[me.cssPrefix + 'transform'] = '';
+      var cssData = {},
+        cssPrefix = me.cssPrefix;
+      cssData[cssPrefix + 'transform'] = '';
       cssData[cssPrefix + 'transition-duration'] = '0' + 's';
       $anchor.css(cssData);
       setAnimation();
