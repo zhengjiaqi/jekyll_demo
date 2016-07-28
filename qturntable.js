@@ -50,6 +50,7 @@ function QTurntable(ele, options, $) {
 QTurntable.prototype = {
   init: function(opt) {
     var me = this, opt = me.opt, $anchor = $(opt.anchor), anchor = $anchor[0];
+    me.$anchor = $anchor;
     me.stop = false;
     me.started = false;
     me.endDeg = 0;
@@ -84,12 +85,12 @@ QTurntable.prototype = {
 
   },
   start: function() {
-    var me = this,
-      $anchor = $(this.opt.anchor);
-    if (me.started) {
+    if (this.started) {
       return;
     }
-    me.started = true;
+    var me = this,
+      $anchor = me.$anchor;
+    this.started = true;
     if (me.endDeg != 0 && me.endDeg != 360) {
       $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
         setAnimation();
@@ -101,6 +102,7 @@ QTurntable.prototype = {
 
     function setAnimation() {
       me.reset();
+      me.started = true;
       var cssData = {},
         cssPrefix = me.cssPrefix;
       cssData[cssPrefix + 'animation-timing-function'] = 'linear';
@@ -108,13 +110,12 @@ QTurntable.prototype = {
       cssData[cssPrefix + 'animation-iteration-count'] = 'infinite';
       cssData[cssPrefix + 'animation-direction'] = 'normal';
       $anchor.css(cssData).addClass('qt-rotate');
-      me.stop = false;
     }
 
   },
   setTransform: function(startDeg, stopDeg, linear) {
     var me = this,
-      $anchor = $(me.opt.anchor);
+      $anchor = me.$anchor;
     var cssPrefix = me.cssPrefix,
       cssData = {},
       time;
