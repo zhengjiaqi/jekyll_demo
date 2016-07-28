@@ -48,6 +48,7 @@ Turntable.prototype = {
     me.started = false;
     me.endDeg = 0;
     me.bufferDeg = opt.bufferDeg;
+    me.cssPrefix = $.fx.cssPrefix;
     initListening();
 
     function initListening() {
@@ -81,6 +82,9 @@ Turntable.prototype = {
     me.started = true;
     if (me.endDeg != 0 && me.endDeg != 360) {
       $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
+        var cssData = {}
+        cssData[me.cssPrefix + 'transform'] = '';
+        $anchor.css(cssData);
         setAnimation();
       });
       me.setTransform(me.endDeg + me.bufferDeg, 360 + me.bufferDeg, true);
@@ -90,7 +94,7 @@ Turntable.prototype = {
 
     function setAnimation() {
       var cssData = {},
-        cssPrefix = $.fx.cssPrefix;
+        cssPrefix = me.cssPrefix;
       cssData[cssPrefix + 'animation-timing-function'] = 'linear';
       cssData[cssPrefix + 'animation-duration'] = me.opt.transitionTime + 's';
       cssData[cssPrefix + 'animation-iteration-count'] = 'infinite';
@@ -106,7 +110,7 @@ Turntable.prototype = {
   setTransform: function(startDeg, stopDeg, linear) {
     var me = this,
       $anchor = $(me.opt.anchor);
-    var cssPrefix = $.fx.cssPrefix,
+    var cssPrefix = me.cssPrefix,
       cssData = {},
       time;
     var degPoor = stopDeg - startDeg;
