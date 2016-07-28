@@ -34,7 +34,7 @@
  * @param {Object} options 配置参数
  * @param {Object} $ zepto
  */
-function Turntable(ele, options, $) {
+function QTurntable(ele, options, $) {
   this.opt = {
     anchor: ele || '',                     //页面锚点
     transitionTime: .5,                    //动画一圈时间
@@ -47,7 +47,7 @@ function Turntable(ele, options, $) {
   this.init(this.opt);
 };
 
-Turntable.prototype = {
+QTurntable.prototype = {
   init: function(opt) {
     var me = this, opt = me.opt, $anchor = $(opt.anchor), anchor = $anchor[0];
     me.stop = false;
