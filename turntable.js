@@ -143,7 +143,7 @@ Turntable.prototype = {
     this.stop = false;
     this.started = false;
     this.endDeg = 0;
-    $(this.opt.anchor).removeAttr('style');
+    $(this.opt.anchor).removeAttr('style').removeClass('qt-rotate');
   },
   getmatrix: function(matrix) {
     matrix = matrix.match(/\((.*)\)/)[1].split(',');
