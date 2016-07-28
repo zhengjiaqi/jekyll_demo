@@ -76,9 +76,9 @@ Turntable.prototype = {
   start: function() {
     var me = this,
       $anchor = $(this.opt.anchor);
-    //if (me.started) {
-    //  return;
-    //}
+    if (me.started) {
+      return;
+    }
     me.started = true;
     if (me.endDeg != 0 && me.endDeg != 360) {
       $anchor.one('webkitTransitionEnd transitionEnd', function(e) {
@@ -90,10 +90,9 @@ Turntable.prototype = {
     }
 
     function setAnimation() {
+      me.reset();
       var cssData = {},
         cssPrefix = me.cssPrefix;
-      cssData[cssPrefix + 'transform'] = '';
-      cssData[cssPrefix + 'transition-duration'] = '0' + 's';
       cssData[cssPrefix + 'animation-timing-function'] = 'linear';
       cssData[cssPrefix + 'animation-duration'] = me.opt.transitionTime + 's';
       cssData[cssPrefix + 'animation-iteration-count'] = 'infinite';
