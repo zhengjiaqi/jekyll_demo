@@ -51,7 +51,9 @@ QTurntable.prototype = {
   init: function(opt) {
     var me = this, opt = me.opt, $anchor = $(opt.anchor), anchor = $anchor[0];
     me.$anchor = $anchor;
+    //是否已经获得要停止的角度
     me.stop = false;
+    //在已经开始抽奖时忽略下一次start
     me.started = false;
     me.endDeg = 0;
     me.bufferDeg = opt.bufferDeg;
