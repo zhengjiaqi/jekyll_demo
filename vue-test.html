@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>vue-test</title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,minimum-scale=1,maximum-scale=1,shrink-to-fit=no,user-scalable=no,minimal-ui"
+          name="viewport">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection"/>
+    <!-- UC默认竖屏 ，UC强制全屏 -->
+    <meta name="full-screen" content="yes"/>
+    <meta name="browsermode" content="application"/>
+    <!-- QQ强制竖屏 QQ强制全屏 -->
+    <meta name="x5-orientation" content="portrait"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta name="x5-page-mode" content="app"/>
+    <link rel="stylesheet" href="http://m.qunar.com/zhuanti/animate.css" type="text/css">
+    <style type="text/css">
+
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      {{ message }}
+    </div>
+
+    <div id="input">
+      <p>{{ message }}</p>
+      <input v-model="message">
+    </div>
+
+    <div id="click">
+      <p>{{ message }}</p>
+      <button v-on:click="reverseMessage">Reverse Message</button>
+    </div>
+
+    <div id="all">
+      <input v-model="newTodo" v-on:keyup.enter="addTodo">
+      <ul>
+        <li v-for="todo in todos">
+          <span>{{ todo.text }}</span>
+          <button v-on:click="removeTodo($index)">X</button>
+        </li>
+      </ul>
+    </div>
+  </body>
+  <script type="text/javascript" src="http://m.qunar.com/zhuanti/zepto.src.js"></script>
+  <script src="./vue.js"></script>
+
+
+  <script>
+    var messageData = {
+      message: 'Hello Vue.js!'
+    };
+    new Vue({
+      el: '#app',
+      data: messageData
+    })
+    new Vue({
+      el: '#input',
+      data: {
+        message: 'hi!!!'
+      }
+    })
+    var testData = {
+      message: 'hehehe!'
+    };
+    new Vue({
+      el: '#click',
+      data: testData,
+      methods: {
+        reverseMessage: function() {
+          this.message = this.message.split('').reverse().join('')
+        }
+      }
+    })
+//    $('#click button').on('click',function() {
+//      testData.message = testData.message.split('').reverse().join('')
+//    });
+
+    new Vue({
+      el: '#all',
+      data: {
+        newTodo: '',
+        todos: [
+          { text: 'Add some todos' }
+        ]
+      },
+      methods: {
+        addTodo: function () {
+          var text = this.newTodo.trim()
+          if (text) {
+            this.todos.push({ text: text })
+            this.newTodo = ''
+          }
+        },
+        removeTodo: function (index) {
+          this.todos.splice(index, 1)
+        }
+      }
+    })
+
+  </script>
+</html>
